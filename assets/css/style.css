@@ -1,0 +1,648 @@
+/* ==========================================================================
+   🌿 Master Stylesheet – AgriCart Portal (Global UI & Layouts)
+   ========================================================================== */
+
+/* ─── RESET & BASE CSS CONFIGURATIONS ─── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #F8FAF7;
+    color: #1c2e1c;
+    overflow-x: hidden;
+    padding-top: 102px;
+}
+
+/* ─── CUSTOM WEBKIT SCROLLBAR ─── */
+::-webkit-scrollbar { width: 7px; }
+::-webkit-scrollbar-track { background: #e8f0e8; }
+::-webkit-scrollbar-thumb { background: #2E7D32; border-radius: 10px; }
+
+/* ─── HARDWARE ACCELERATED TOP FLASH OFFERS MARQUEE BAR (Screenshot Colors) ─── */
+#flash-bar {
+    position: fixed !important; top: 0 !important; left: 0 !important; width: 100% !important; 
+    height: 32px !important; background: #0b1c14 !important; /* Screenshot Dark Green */
+    z-index: 1100 !important; overflow: hidden !important; display: flex !important; align-items: center !important;
+    border-bottom: 1px solid #1a3c24 !important;
+}
+.marquee-track {
+    display: flex !important; width: max-content !important;
+    animation: marqueeRun 15s linear infinite !important;
+}
+.marquee-track:hover { animation-play-state: paused !important; }
+.flash-item, .flash-item * {
+    font-size: 13px !important; font-weight: 600 !important;
+    color: #FFC107 !important; /* Screenshot Proper Yellow */
+}
+.flash-item {
+    display: inline-flex !important; align-items: center !important; gap: 8px !important;
+    padding: 0 40px !important; white-space: nowrap !important;
+}
+.flash-item i {
+    color: #FFC107 !important;
+    font-size: 14px !important;
+}
+.flash-item .sep { 
+    color: rgba(255, 193, 7, 0.4) !important; 
+    margin: 0 15px !important; 
+}
+
+@keyframes marqueeRun {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* ─── PRIMARY PLATFORM GLOBAL NAVIGATION HEADER ─── */
+#main-header {
+    position: fixed; top: 32px; left: 0; width: 100%; height: 70px;
+    background: #0b1a14; z-index: 1000; display: flex;
+    justify-content: space-between; align-items: center; padding: 0 5%;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+}
+.nav-logo {
+    font-size: 22px; font-weight: 800; color: #fff; text-decoration: none;
+    display: flex; align-items: center; gap: 9px; letter-spacing: -0.3px;
+}
+.nav-logo i, .nav-logo-cart { color: #4CAF50; }
+.nav-logo-img { height: 58px; width: 58px; object-fit: contain; border-radius: 50%; }
+.nav-logo-txt { font-size: 26px; font-weight: 800; letter-spacing: -0.4px; }
+.nav-logo-txt .agri { color: #FFFFFF; }
+.nav-logo-txt .cart { color: #5A9802; margin-left: 1px; }
+
+.nav-menu { display: flex; gap: 4px; list-style: none; align-items: center; flex: 1; justify-content: center; }
+.nav-menu a {
+    color: rgba(255,255,255,0.80); text-decoration: none; font-size: 12.8px; font-weight: 600;
+    display: flex; align-items: center; gap: 5px; padding: 6px 10px;
+    background: transparent !important; border-radius: 0 !important; box-shadow: none !important;
+    transition: color 0.25s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.nav-menu a:hover { color: #388E3C !important; transform: translateY(-4px); }
+
+/* ─── 🎯 ACTIVE PAGE HIGHLIGHT STYLES (Screenshot Colors) ─── */
+.nav-menu a.active {
+    color: #ffffff !important;
+    transform: translateY(-4px) !important;
+    border-bottom: 3px solid #388E3C !important;
+    padding-bottom: 4px !important;
+}
+
+/* RIGHT PROFILE & PREFERENCE CONTROLS */
+.nav-right { display: flex; align-items: center; gap: 10px; position: relative; }
+.lang-select {
+    padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.08); color: #fff; font-size: 12px; font-weight: 600;
+    outline: none; cursor: pointer; transition: 0.3s; font-family: 'Poppins', sans-serif;
+}
+.lang-select option { background: #0b1a14; color: #fff; }
+.lang-select:hover { border-color: #4CAF50; background: rgba(255,255,255,0.12); }
+
+.user-badge {
+    display: flex; align-items: center; gap: 7px; padding: 6px 14px; border-radius: 22px;
+    border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.07);
+    color: #fff; font-size: 12.5px; font-weight: 600; cursor: pointer; transition: 0.25s;
+}
+.user-badge:hover { background: rgba(76,175,80,0.18); border-color: #4CAF50; }
+
+/* INTERACTIVE NAV DROPDOWN MODULE */
+.profile-dropdown {
+    position: absolute; top: calc(100% + 12px); right: 0; width: 215px;
+    background: #fff; border-radius: 14px; box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+    display: none; flex-direction: column; overflow: hidden; z-index: 1200; border: 1px solid #e0ece0;
+}
+.profile-dropdown.show { display: flex; }
+.dropdown-header {
+    padding: 12px 16px; background: linear-gradient(135deg, #1b5e20, #2e7d32);
+    color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 8px;
+}
+.dropdown-link {
+    padding: 11px 16px; color: #333; text-decoration: none; font-size: 13px;
+    display: flex; align-items: center; gap: 10px; transition: 0.2s; border-bottom: 1px solid #f2f7f2;
+}
+.dropdown-link:hover { background: #f0f9f0; color: #2E7D32; }
+.dropdown-logout {
+    padding: 11px 16px; color: #c62828; font-size: 13px; font-weight: 600;
+    display: flex; align-items: center; gap: 10px; background: #fff9f9; text-decoration: none; transition: 0.2s;
+}
+.dropdown-logout:hover { background: #ffebee; }
+
+/* ACCOUNT MANAGEMENT POPUP WINDOW STYLE */
+.profile-modal {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 2000;
+    display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px);
+}
+.profile-modal.open { display: flex; }
+.modal-card { background: #fff; width: 92%; max-width: 480px; border-radius: 18px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.22); }
+.modal-top { background: linear-gradient(135deg, #0b1a14, #2e7d32); color: #fff; padding: 28px 24px 24px; text-align: center; position: relative; }
+.modal-top .close-btn { position: absolute; top: 14px; right: 18px; font-size: 22px; cursor: pointer; color: rgba(255,255,255,0.7); transition: 0.2s; }
+.modal-top .close-btn:hover { color: #fff; }
+.modal-avatar { width: 64px; height: 64px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 10px; border: 2px solid rgba(255,255,255,0.4); }
+.modal-top h3 { font-size: 18px; font-weight: 700; margin-bottom: 3px; }
+.modal-top p { font-size: 11.5px; color: rgba(255,255,255,0.7); }
+.modal-body { padding: 22px; max-height: 60vh; overflow-y: auto; }
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.8px; color: #666; font-weight: 700; margin-bottom: 5px; }
+.form-group input, .form-group textarea { width: 100%; padding: 10px 13px; border: 1.5px solid #dde8dd; border-radius: 9px; font-size: 13.5px; outline: none; background: #fafdfa; color: #1c2e1c; transition: border-color 0.2s; font-family: 'Poppins', sans-serif; }
+.form-group input:focus, .form-group textarea:focus { border-color: #4CAF50; }
+.save-btn { width: 100%; background: linear-gradient(135deg, #2E7D32, #43A047); color: #fff; border: none; padding: 12px; border-radius: 9px; font-weight: 700; font-size: 14px; cursor: pointer; transition: 0.3s; }
+.save-btn:hover { background: linear-gradient(135deg, #1b5e20, #2E7D32); }
+
+/* Read-only account detail chips shown at the top of the profile card */
+.profile-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+.info-chip { display: flex; align-items: flex-start; gap: 9px; background: #f4f9f4; border: 1px solid #e3ede3; border-radius: 10px; padding: 9px 10px; }
+.info-chip i { color: #2E7D32; font-size: 13px; margin-top: 3px; }
+.info-chip div { display: flex; flex-direction: column; min-width: 0; }
+.info-chip span { font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.6px; color: #7c8c7c; font-weight: 700; }
+.info-chip b { font-size: 12.5px; color: #1c2e1c; font-weight: 600; overflow-wrap: anywhere; }
+@media (max-width: 420px) { .profile-info-grid { grid-template-columns: 1fr; } }
+.info-chip-wide { grid-column: 1 / -1; }
+.modal-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+
+/* ---- Edit Profile button (view mode) ---- */
+.edit-profile-btn { width: 100%; background: #fff; color: #2E7D32; border: 1.5px solid #2E7D32; padding: 11px; border-radius: 9px; font-weight: 700; font-size: 13.5px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.edit-profile-btn:hover { background: #eaf5ea; }
+
+/* ---- Edit mode: photo upload ---- */
+.photo-edit-row { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+.photo-edit-preview { width: 60px; height: 60px; min-width: 60px; border-radius: 50%; background: #f4f9f4; border: 1.5px solid #e3ede3; display: flex; align-items: center; justify-content: center; overflow: hidden; font-size: 24px; color: #2E7D32; }
+.photo-edit-preview img { width: 100%; height: 100%; object-fit: cover; }
+.photo-upload-btn { display: inline-flex; align-items: center; gap: 7px; background: #f4f9f4; border: 1.5px solid #dde8dd; color: #2E7D32; padding: 8px 14px; border-radius: 8px; font-size: 12.5px; font-weight: 700; cursor: pointer; }
+.photo-upload-btn:hover { background: #eaf5ea; }
+.photo-hint { font-size: 10.5px; color: #7c8c7c; margin: 6px 0 0; }
+
+/* ---- Read-only Account Type badge ---- */
+.readonly-badge { display: inline-flex; align-items: center; gap: 7px; background: #f4f9f4; border: 1.5px solid #e3ede3; color: #556655; padding: 9px 13px; border-radius: 9px; font-size: 13px; font-weight: 600; }
+.field-hint { font-size: 10.5px; color: #7c8c7c; margin: 6px 0 0; }
+
+/* ---- Delivery address grid ---- */
+.address-section-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: #2E7D32; font-weight: 700; margin: 4px 0 10px; }
+.address-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 10px; }
+.address-grid .span-2 { grid-column: 1 / -1; }
+@media (max-width: 420px) { .address-grid { grid-template-columns: 1fr; } }
+
+/* ---- Searchable crop select ---- */
+.searchable-select { position: relative; }
+.searchable-select-panel { display: none; position: absolute; top: calc(100% + 4px); left: 0; right: 0; max-height: 180px; overflow-y: auto; background: #fff; border: 1.5px solid #dde8dd; border-radius: 9px; box-shadow: 0 10px 24px rgba(0,0,0,0.12); z-index: 20; }
+.searchable-select.open .searchable-select-panel { display: block; }
+.searchable-select-option { padding: 9px 13px; font-size: 13px; color: #1c2e1c; cursor: pointer; }
+.searchable-select-option:hover, .searchable-select-option.active { background: #f4f9f4; }
+.searchable-select-option.hidden { display: none; }
+
+/* ---- Edit mode buttons ---- */
+.edit-btn-row { display: flex; gap: 10px; }
+.edit-btn-row .save-btn { width: auto; flex: 1; }
+.cancel-btn { flex: 1; background: #fff; color: #556655; border: 1.5px solid #dde8dd; padding: 12px; border-radius: 9px; font-weight: 700; font-size: 14px; cursor: pointer; transition: 0.2s; }
+.cancel-btn:hover { background: #f4f9f4; }
+
+/* "My Order & Booking History" trigger inside the profile card */
+.history-btn { width: 100%; margin-top: 10px; background: #fff; color: #2E7D32; border: 1.5px solid #2E7D32; padding: 11px; border-radius: 9px; font-weight: 700; font-size: 13.5px; cursor: pointer; transition: 0.25s; }
+.history-btn:hover { background: #eaf5ea; }
+
+/* ===== MY HISTORY MODAL (orders + rental bookings, site-wide) ===== */
+.history-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 2100; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); padding: 16px; }
+.history-modal.open { display: flex; }
+.history-card { background: #fff; width: 100%; max-width: 560px; max-height: 88vh; border-radius: 18px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.25); display: flex; flex-direction: column; }
+.history-top { background: linear-gradient(135deg, #0b1a14, #2e7d32); color: #fff; padding: 22px 24px 16px; position: relative; text-align: center; }
+.history-top .close-btn { position: absolute; top: 14px; right: 18px; font-size: 22px; cursor: pointer; color: rgba(255,255,255,0.7); }
+.history-top .close-btn:hover { color: #fff; }
+.history-top h3 { font-size: 17px; font-weight: 700; margin-bottom: 3px; }
+.history-top p { font-size: 11.5px; color: rgba(255,255,255,0.7); }
+.history-tabs { display: flex; border-bottom: 1px solid #eee; }
+.history-tab { flex: 1; background: none; border: none; padding: 12px; font-size: 13px; font-weight: 700; color: #888; cursor: pointer; border-bottom: 3px solid transparent; transition: 0.2s; }
+.history-tab.active { color: #2E7D32; border-bottom-color: #2E7D32; }
+.history-body { padding: 18px 20px; overflow-y: auto; flex: 1; }
+.history-loading, .history-empty { text-align: center; color: #888; font-size: 13px; padding: 30px 10px; }
+.hist-card { border: 1px solid #eee; border-radius: 10px; padding: 13px 14px; margin-bottom: 12px; }
+.hist-head { display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; font-weight: 700; color: #1c2e1c; margin-bottom: 6px; gap: 8px; }
+.hist-head .hist-date { font-weight: 500; color: #888; font-size: 11px; }
+.hist-status { display: inline-block; padding: 2px 9px; border-radius: 12px; font-size: 10px; font-weight: 700; text-transform: capitalize; background: #eef3ee; color: #2E7D32; white-space: nowrap; }
+.hist-status.cancelled { background: #fbeaea; color: #a33; }
+.hist-status.pending { background: #fff6e0; color: #9a7300; }
+.hist-items { font-size: 12px; color: #555; margin: 6px 0; line-height: 1.6; }
+.hist-foot { display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; margin-top: 6px; padding-top: 8px; border-top: 1px dashed #e5e5e5; }
+.hist-foot .hist-amount { font-weight: 700; color: #2E7D32; }
+
+/* ─── DYNAMIC HERO SLIDER CAROUSEL MODULE ─── */
+.slider-wrap { position: relative; height: 78vh; min-height: 500px; overflow: hidden; background: #0c1a0c; }
+.slide { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transform: scale(1.06); transition: opacity 0.7s cubic-bezier(0.65,0,0.35,1), transform 4s ease-out; z-index: 1; pointer-events: none; }
+.slide.active { opacity: 1; transform: scale(1); z-index: 2; pointer-events: auto; }
+.slide-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, rgba(5,20,5,0.62) 100%); z-index: 3; }
+.slide-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, calc(-50% + 18px)); text-align: center; color: #fff; width: 88%; max-width: 860px; z-index: 10; opacity: 0; transition: opacity .7s ease .2s, transform .7s ease .2s; }
+.slide.active .slide-content { opacity: 1; transform: translate(-50%, -50%); }
+.slide-tag { display: inline-block; background: rgba(76,175,80,0.22); border: 1px solid rgba(76,175,80,0.5); color: #a5d6a7; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 14px; border-radius: 20px; margin-bottom: 14px; }
+.slide-content h1 { font-size: clamp(28px, 4.5vw, 50px); font-weight: 800; line-height: 1.15; margin-bottom: 12px; text-shadow: 0 4px 14px rgba(0,0,0,0.4); }
+.slide-content p { font-size: 16px; color: rgba(255,255,255,0.82); margin-bottom: 26px; max-width: 600px; margin-left: auto; margin-right: auto; }
+.slide-cta { display: inline-block; background: #388E3C !important; color: #fff !important; padding: 12px 32px; border-radius: 32px; font-weight: 700; font-size: 15px; text-decoration: none; transition: 0.3s; box-shadow: 0 4px 15px rgba(56, 142, 60, 0.4); }
+.slide-cta:hover { background: #2E7D32 !important; transform: translateY(-2px); }
+
+.hero-search { background: rgba(255,255,255,0.96); padding: 5px 6px; border-radius: 40px; display: flex; max-width: 520px; margin: 22px auto 0; box-shadow: 0 12px 35px rgba(0,0,0,0.2); }
+.hero-search input { flex: 1; border: none; padding: 10px 18px; outline: none; font-size: 13.5px; background: transparent; color: #1c2e1c; font-family: 'Poppins', sans-serif; }
+.hero-search button { background: #2E7D32; color: #fff; border: none; padding: 10px 24px; border-radius: 35px; font-weight: 700; font-size: 13px; cursor: pointer; transition: 0.3s; font-family: 'Poppins', sans-serif; }
+.hero-search button:hover { background: #4CAF50; }
+
+.slider-dots { position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 20; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.35); cursor: pointer; transition: 0.3s; }
+.dot.active { background: #4CAF50; width: 24px; border-radius: 4px; }
+
+/* ─── STANDALONE MULTI-PAGE INNER HERO BANNER LAYOUTS ─── */
+.hero {
+    background: linear-gradient(rgba(11, 26, 20, 0.6), rgba(11, 26, 20, 0.85)), 
+                url('https://images.unsplash.com/photo-1592417817098-8f3d6eb19675?w=1600&q=80') center/cover no-repeat;
+    height: 78vh; min-height: 500px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 2rem 1rem; color: white; position: relative;
+}
+.hero-badge {
+    background: rgba(76, 175, 80, 0.22); border: 1px solid rgba(76, 175, 80, 0.5);
+    color: #a5d6a7; font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+    padding: 4px 14px; border-radius: 20px; margin-bottom: 12px; text-transform: uppercase;
+}
+.hero h1 { font-size: clamp(28px, 4vw, 46px); font-weight: 800; margin-bottom: 8px; text-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+.hero p { font-size: 14.5px; color: rgba(255,255,255,0.85); max-width: 600px; margin-bottom: 20px; }
+
+/* ─── SUMMARY STATISTICAL OVERVIEW COMPONENTS ─── */
+.stat-strip, .stats { display: grid; grid-template-columns: repeat(4, 1fr); background: #0b1a14; width: 100%; }
+.stat-item { padding: 24px 20px; text-align: center; border-right: 1px solid rgba(255,255,255,0.08); }
+.stat-item:last-child { border-right: none; }
+.stat-item h3 { font-size: 30px; font-weight: 800; color: #4CAF50; margin-bottom: 4px; }
+.stat-item p, .stat-lbl { font-size: 12.5px; color: rgba(255,255,255,0.55); font-weight: 500; }
+.stat-item { display: flex; flex-direction: column; align-items: center; }
+.stat-item::before { content: ""; display: block; height: 20px; margin-bottom: 6px; }
+.stat-item:has(.mini-stars)::before { content: none; }
+.mini-stars { display: flex; align-items: center; justify-content: center; gap: 3px; height: 20px; margin-bottom: 6px; font-size: 15px; color: #FFC107; line-height: 1; }
+.mini-stars .fa-regular { color: rgba(255,255,255,0.35); }
+
+/* ─── HOMEPAGE CONTENT GRID SYSTEMS ─── */
+.section-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #2E7D32; margin-bottom: 8px; }
+.section-title { font-size: clamp(22px, 3vw, 32px); font-weight: 800; color: #0b1a14; margin-bottom: 8px; }
+.section-sub { font-size: 14px; color: #666; max-width: 580px; }
+
+.gallery-section { padding: 64px 6%; background: #fff; }
+.gallery-head { margin-bottom: 36px; }
+.gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+@media (max-width: 900px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .gallery-grid { grid-template-columns: 1fr; } }
+.gallery-card { background: #fff; border-radius: 18px; overflow: hidden; border: 1px solid #e5efe5; display: flex; flex-direction: column; transition: transform 0.35s cubic-bezier(0.25,0.8,0.25,1), box-shadow 0.35s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.04); }
+.gallery-card:hover { transform: translateY(-7px); box-shadow: 0 20px 45px rgba(46,125,50,0.13); }
+.gallery-img { height: 200px; background-size: cover; background-position: center; position: relative; }
+.gallery-img-tag { position: absolute; bottom: 12px; left: 12px; background: rgba(11,26,20,0.8); color: #a5d6a7; font-size: 10.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 4px 10px; border-radius: 6px; }
+.gallery-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+.gallery-body h4 { font-size: 16px; font-weight: 700; color: #0b1a14; margin-bottom: 7px; }
+.gallery-body p { font-size: 13px; color: #666; line-height: 1.6; flex: 1; margin-bottom: 16px; }
+.gallery-btn { display: block; text-align: center; padding: 10px; border-radius: 9px; background: #f0f9f0; color: #2E7D32; text-decoration: none; font-size: 13px; font-weight: 700; transition: 0.25s; border: 1.5px solid #c8e6c9; }
+.gallery-btn:hover { background: #2E7D32; color: #fff; border-color: #2E7D32; }
+
+/* ─── LIVE DATA INTERACTIVE DASHBOARD WIDGETS ─── */
+.widget-section { padding: 64px 6%; background: #F4F8F4; }
+.widget-section > .section-label, .widget-section > .section-title { margin-bottom: 6px; }
+.widget-section > .section-sub { margin-bottom: 36px; }
+.widget-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+@media (max-width: 860px) { .widget-grid { grid-template-columns: 1fr; } }
+.widget-card { background: #fff; border-radius: 20px; padding: 28px; border: 1px solid #e0ece0; box-shadow: 0 8px 30px rgba(46,125,50,0.05); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.widget-card:hover { transform: translateY(-5px); box-shadow: 0 18px 45px rgba(46,125,50,0.11); }
+.widget-card h3 { font-size: 16px; font-weight: 700; color: #0b1a14; margin-bottom: 18px; display: flex; align-items: center; gap: 9px; }
+
+.weather-main { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; gap: 10px; }
+.weather-main > div { min-width: 0; } /* lets each side shrink/wrap instead of forcing the whole card (and page) wider than the screen */
+.weather-temp { font-size: 44px; font-weight: 800; color: #2E7D32; line-height: 1; }
+.weather-temp span { font-size: 18px; font-weight: 500; color: #888; }
+.weather-condition { font-size: 13px; color: #888; font-weight: 500; }
+.weather-location { font-size: 14px; font-weight: 700; color: #333; overflow-wrap: break-word; }
+.weather-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #f4f8f4; border-radius: 12px; padding: 14px; }
+.weather-meta-item { font-size: 12.5px; color: #555; display: flex; align-items: center; gap: 6px; }
+.weather-meta-item i { color: #2E7D32; width: 16px; }
+.weather-advice { margin-top: 14px; padding: 12px 14px; background: #e8f5e9; border-radius: 10px; font-size: 12.5px; color: #1b5e20; font-weight: 500; display: flex; align-items: flex-start; gap: 8px; }
+.weather-forecast { display: flex; gap: 8px; margin-top: 14px; overflow-x: auto; padding-bottom: 4px; }
+.forecast-day { flex: 1; min-width: 56px; text-align: center; background: #f4f8f4; border-radius: 10px; padding: 8px 4px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.fc-day { font-size: 11px; font-weight: 700; color: #555; }
+.fc-icon { font-size: 20px; line-height: 1; }
+.fc-temp { font-size: 12px; font-weight: 700; color: #2E7D32; }
+.fc-rain { font-size: 10px; color: #64b5f6; }
+
+.calc-input { width: 100%; padding: 12px 15px; border: 1.5px solid #dde8dd; border-radius: 10px; font-size: 14px; outline: none; background: #fafdfa; color: #1c2e1c; transition: border-color 0.2s; margin-bottom: 14px; font-family: 'Poppins', sans-serif; }
+.calc-input:focus { border-color: #4CAF50; }
+.calc-result { padding: 13px 15px; background: #e8f5e9; border-radius: 10px; font-size: 13.5px; color: #1b5e20; font-weight: 600; margin-bottom: 18px; }
+.calc-result b { font-size: 18px; color: #2E7D32; }
+.scheme-list { display: flex; flex-direction: column; gap: 8px; max-height: 260px; overflow-y: auto; margin-bottom: 16px; padding-right: 4px; }
+.scheme-list::-webkit-scrollbar { width: 4px; }
+.scheme-list::-webkit-scrollbar-thumb { background: #a5d6a7; border-radius: 4px; }
+.scheme-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border: 1px solid #e0ece0; border-radius: 12px; background: #fafdfa; text-decoration: none; transition: 0.2s; }
+.scheme-item:hover { background: #eef8ef; border-color: #4CAF50; transform: translateX(3px); }
+.scheme-ic { width: 36px; height: 36px; flex-shrink: 0; border-radius: 10px; background: #e8f5e9; display: flex; align-items: center; justify-content: center; }
+.scheme-ic i { color: #2E7D32; font-size: 15px; }
+.scheme-info { flex: 1; min-width: 0; }
+.scheme-info h4 { font-size: 13.5px; font-weight: 700; color: #1b5e20; margin: 0 0 2px; }
+.scheme-info p { font-size: 11.5px; color: #6b7d6b; margin: 0; line-height: 1.4; }
+.scheme-go { color: #a5d6a7; font-size: 12px; flex-shrink: 0; }
+.scheme-item:hover .scheme-go { color: #4CAF50; }
+
+.scan-box { border: 2px dashed #81C784; border-radius: 14px; padding: 22px; text-align: center; background: #fafdfa; cursor: pointer; transition: 0.25s; }
+.scan-box:hover { background: #f0f9f0; border-color: #4CAF50; }
+.scan-box i { font-size: 32px; color: #2E7D32; margin-bottom: 8px; display: block; }
+.scan-box h4 { font-size: 14px; font-weight: 700; color: #1b5e20; margin-bottom: 4px; }
+.scan-box p { font-size: 12px; color: #888; }
+
+/* ─── CONSUMER TESTIMONIAL FEEDBACK PANELS ─── */
+.testimonials-section { padding: 64px 6%; background: #fff; }
+.testimonials-head { margin-bottom: 36px; }
+.testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px; }
+.test-card { background: #fff; border-radius: 16px; padding: 24px; border: 1px solid #e5efe5; border-left: 5px solid #2E7D32; box-shadow: 0 4px 18px rgba(0,0,0,0.03); transition: transform 0.3s ease; }
+.test-card:hover { transform: translateY(-4px); }
+.test-stars { color: #FFC107; font-size: 12px; margin-bottom: 10px; }
+.test-card p { font-style: italic; font-size: 14px; color: #444; line-height: 1.65; margin-bottom: 14px; }
+.test-card h5 { font-size: 13.5px; color: #2E7D32; font-weight: 700; }
+
+/* ─── COMPREHENSIVE PLATFORM MASTER FOOTER ─── */
+footer { background: #0b1a14; color: #7a9b7a; padding: 20px 6% 24px; text-align: left; border-top: 3px solid #2E7D32; }
+.footer-logo { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 12px; display: flex; align-items: center; justify-content: flex-start; gap: 9px; }
+.footer-logo i { color: #4CAF50; }
+.footer-tagline { font-size: 13px; color: #5a7a5a; margin-bottom: 24px; }
+.footer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-bottom: 2rem; text-align: left; }
+.footer-col h4 { color: white; font-size: 15px; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+.footer-col a { display: block; color: #7a9b7a; font-size: 13px; margin-bottom: 8px; text-decoration: none; transition: 0.2s; }
+.footer-col a:hover { color: #FFC107; }
+.footer-col p { font-size: 13px; line-height: 1.6; }
+.footer-socials { display: flex; justify-content: flex-start; gap: 22px; margin-bottom: 22px; }
+.footer-socials a { color: #7a9b7a; font-size: 22px; text-decoration: none; transition: color 0.3s, transform 0.3s; }
+.footer-socials a:hover { color: #FFC107; transform: translateY(-3px) scale(1.1); }
+.footer-socials a.wa:hover { color: #25D366; }
+.footer-copy, .footer-bottom { font-size: 12px; color: #4a6a4a; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 16px; display: flex; justify-content: space-between; align-items: center; }
+.footer-bottom a { color: #4CAF50; text-decoration: none; }
+
+
+/* ==========================================================================
+   🎯 MODULAR APP GRID DESKTOP (Side-by-Side Dashboard Layouts)
+   ========================================================================== */
+.store-layout { 
+    display: grid; 
+    grid-template-columns: 260px 1fr; 
+    gap: 1.5rem; 
+    max-width: 1340px; 
+    margin: 0 auto; 
+    padding: 2rem 1rem; 
+    align-items: start; 
+}
+
+/* SIDEBAR AND CRITERIA FILTER BLOCKS */
+.sidebar { background: white; border-radius: 16px; border: 1px solid #e5efe5; overflow: hidden; position: sticky; top: 130px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
+.sidebar-header { background: #0b1a14; color: white; padding: 14px 16px; font-size: 13.5px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.sidebar-section { border-bottom: 1px solid #f2f7f2; padding: 16px; }
+.sidebar-section:last-child { border-bottom: none; }
+.sidebar-section h4 { font-size: 11px; font-weight: 700; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+
+.cat-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; color: #333; transition: 0.2s; margin-bottom: 4px; }
+.cat-item:hover, .cat-item.active { background: #f0f9f0; color: #2E7D32; font-weight: 600; }
+.cat-count { margin-left: auto; background: #f3f4f6; font-size: 10.5px; padding: 2px 7px; border-radius: 10px; color: #666; }
+.cat-item.active .cat-count { background: #c8e6c9; color: #1b5e20; }
+.price-range input[type=range] { width: 100%; accent-color: #2E7D32; }
+.price-labels { display: flex; justify-content: space-between; font-size: 11.5px; color: #666; margin-top: 4px; }
+
+/* COMPONENT WRAPPER PANELS */
+.products-area { min-width: 0; }
+.offer-strip { display: flex; align-items: center; gap: 12px; color: white; margin-bottom: 1rem; padding: 14px 20px; border-radius: 14px; background: linear-gradient(90deg, #113814, #2e7d32); box-shadow: 0 4px 15px rgba(46,125,50,0.15); }
+.offer-strip i { font-size: 22px; color: #FFC107; }
+.offer-strip strong { font-size: 14px; }
+.offer-strip span { font-size: 12.5px; color: #a5d6a7; }
+.offer-code { margin-left: auto; background: rgba(255,255,255,0.15); border: 1px dashed rgba(255,255,255,0.4); padding: 5px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; cursor: pointer; }
+
+.filter-bar { background: white; border: 1px solid #e5efe5; border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+.filter-bar-left { font-size: 13px; color: #555; }
+.sort-select { border: 1px solid #dde8dd; border-radius: 8px; padding: 6px 12px; font-size: 12.5px; color: #333; outline: none; cursor: pointer; font-family: 'Poppins', sans-serif; }
+
+/* DYNAMIC CATALOG CARDS BLOCK */
+.products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.25rem; width: 100%; }
+.product-card { background: white; border: 1px solid #e5efe5; border-radius: 16px; overflow: hidden; transition: all 0.3s ease; position: relative; display: flex; flex-direction: column; box-shadow: 0 4px 18px rgba(0,0,0,0.02); }
+.product-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(46,125,50,0.12); border-color: #c8e6c9; }
+
+.product-badge { position: absolute; top: 10px; left: 10px; background: #dc2626; color: white; font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 6px; z-index: 1; text-transform: uppercase; }
+.product-img { height: 160px; display: flex; align-items: center; justify-content: center; font-size: 58px; background: linear-gradient(135deg, #f0f9f0, #e8f5e9); position: relative; }
+.product-body { padding: 16px; flex: 1; display: flex; flex-direction: column; }
+.product-name { font-size: 14.5px; font-weight: 700; color: #0b1a14; margin-bottom: 4px; }
+.product-unit { font-size: 12px; color: #777; margin-bottom: 10px; }
+.price-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 14px; }
+.price-now { font-size: 18px; font-weight: 800; color: #2E7D32; }
+.price-old { font-size: 12.5px; color: #999; text-decoration: line-through; }
+
+.add-btn { width: 100%; background: #f0f9f0; border: 1.5px solid #c8e6c9; color: #2E7D32; padding: 9px; border-radius: 9px; font-size: 12.5px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.25s; font-family: 'Poppins', sans-serif; margin-top: auto; }
+.add-btn:hover { background: #2E7D32; color: white; border-color: #2E7D32; }
+
+/* SHOPPING CART OVERLAY MODAL CANVAS */
+.cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 1300; display: none; backdrop-filter: blur(4px); }
+.cart-overlay.open { display: block; }
+.cart-drawer { position: fixed; top: 0; right: 0; bottom: 0; width: 360px; background: white; z-index: 1400; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); border-left: 1px solid #dde8dd; }
+.cart-drawer.open { transform: translateX(0); }
+
+/* Cart specifically opens from the LEFT side of the screen */
+#cartDrawer { right: auto; left: 0; border-left: none; border-right: 1px solid #dde8dd; transform: translateX(-100%); }
+#cartDrawer.open { transform: translateX(0); }
+.cart-head { background: linear-gradient(135deg, #0b1a14, #2e7d32); color: white; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; }
+.cart-head h2 { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.close-drawer { background: none; border: none; color: rgba(255,255,255,0.8); font-size: 20px; cursor: pointer; }
+.close-drawer:hover { color: #fff; }
+
+.cart-body { flex: 1; overflow-y: auto; padding: 16px; }
+.cart-item-row { display: flex; gap: 10px; padding: 12px 0; border-bottom: 1px solid #f2f7f2; align-items: center; }
+.cart-item-emoji { font-size: 28px; background: #f0f9f0; border-radius: 8px; width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; }
+.cart-item-details { flex: 1; }
+.cart-item-name { font-size: 13.5px; font-weight: 600; color: #1c2e1c; }
+.cart-item-price { font-size: 13px; color: #2E7D32; font-weight: 700; }
+
+.qty-row { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+.qty-btn { width: 24px; height: 24px; border-radius: 4px; border: 1px solid #dde8dd; background: white; cursor: pointer; font-weight: 700; font-size: 12px; }
+.qty-val { font-size: 13px; font-weight: 700; min-width: 16px; text-align: center; }
+.remove-btn { margin-left: auto; background: none; border: none; color: #ccc; cursor: pointer; font-size: 14px; }
+.remove-btn:hover { color: #dc2626; }
+
+.cart-foot { padding: 16px 20px; border-top: 1px solid #f2f7f2; background: #fafdfa; }
+.cart-summary-row { display: flex; justify-content: space-between; font-size: 13px; color: #555; margin-bottom: 6px; }
+.cart-summary-row.total { font-size: 15px; font-weight: 700; color: #0b1a14; border-top: 1px solid #e5efe5; padding-top: 10px; margin-top: 4px; }
+.checkout-btn { width: 100%; background: linear-gradient(135deg, #2E7D32, #43A047); color: white; border: none; padding: 12px; border-radius: 9px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-family: 'Poppins', sans-serif; }
+
+.cart-toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: #0b1a14; color: white; padding: 10px 22px; border-radius: 30px; font-size: 13px; font-weight: 500; z-index: 2000; display: flex; align-items: center; gap: 8px; box-shadow: 0 8px 30px rgba(0,0,0,0.2); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.cart-toast.show { transform: translateX(-50%) translateY(0); }
+.cart-toast i { color: #4CAF50; }
+
+/* ─── MEDIA QUERY BREAKPOINTS FOR MOBILE FLUIDITY ─── */
+@media (max-width: 992px) { 
+    .store-layout { grid-template-columns: 1fr; } 
+    .sidebar { position: static; width: 100%; } 
+    /* BUGFIX: .sidebar-col itself (rental.php / marketplace.php etc.) is
+       given `position:sticky;top:130px` via an inline style="" attribute,
+       separately from the `.sidebar` cards it contains — fixing the inner
+       cards to `position:static` above didn't touch the sticky *wrapper*.
+       Once .store-layout collapses to one column, that stuck wrapper kept
+       pinning "My Bookings"/"Filter Machinery" near the top of the screen
+       while the equipment cards below scrolled past underneath it,
+       overlapping them. Needs !important to win over the inline style. */
+    .sidebar-col { position: static !important; top: auto !important; }
+    .stats, .stat-strip { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) { 
+    body { padding-top: 100px; } 
+    .footer-grid { grid-template-columns: 1fr; }
+}
+
+/* ─── MOBILE HAMBURGER NAVIGATION DRAWER ─── */
+.hamburger-btn {
+    display: none;
+    background: none; border: none; color: #fff; font-size: 20px;
+    cursor: pointer; width: 44px; height: 44px; align-items: center; justify-content: center;
+    z-index: 1600; position: relative; border-radius: 10px; transition: background 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+.hamburger-btn:hover, .hamburger-btn:focus-visible { background: rgba(255,255,255,0.08); }
+.nav-collapse {
+    display: flex; align-items: center; gap: 30px; flex: 1; justify-content: flex-end;
+    margin-left: 24px; min-width: 0;
+} /* desktop: plain flex, nav-menu + nav-right pushed to the right */
+
+.nav-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(4,10,7,0.6);
+    /* Must stay BELOW #main-header's own z-index (1000), not above it.
+       #main-header is `position:fixed` with an explicit z-index, so it
+       creates its own stacking context — and .nav-collapse (the drawer)
+       is a DESCENDANT of #main-header. That means the drawer's z-index:1500
+       only wins comparisons against other elements *inside* #main-header;
+       against this overlay (a sibling outside #main-header), the header's
+       entire subtree only counts as z-index:1000 in the root context. With
+       the overlay previously at 1400 > 1000, it painted — and hit-tested
+       clicks — ABOVE the whole header, including the drawer inside it, even
+       though the drawer looked visually correct. That's what made menu
+       items "look fine but not respond to taps." Keeping the overlay below
+       999 lets the header (and the drawer nested in it) always win. */
+    z-index: 950; opacity: 0; transition: opacity 0.3s ease;
+}
+.nav-overlay.show { display: block; opacity: 1; }
+
+body.no-scroll { overflow: hidden; }
+
+@media (max-width: 992px) {
+    .hamburger-btn { display: flex; }
+
+    /* BUGFIX: this drawer used to be `top:0; height:100vh`, i.e. it covered
+       the full screen including the site header underneath it. Since the
+       drawer's z-index (1500) is higher than #main-header's (1000), the
+       opaque drawer panel physically painted OVER the header's own
+       hamburger/close toggle whenever it was open — not just dimmed, but
+       literally hidden and unclickable, so there was no way to close the
+       menu or use the header except by tapping the dimmed overlay far to
+       the left of the drawer. Starting the drawer (and its overlay, below)
+       at 98px — exactly the promo-bar + header's combined height, see the
+       "Layout Gap Fix" `body{padding-top:98px}` further up this file —
+       keeps the header fully visible and clickable above the drawer at
+       all times, matching what the drawer's own emptied-out top padding
+       was already trying (and failing) to achieve. */
+
+    /* Drawer panel width scales smoothly with the viewport instead of a
+       single fixed px value, so it looks balanced from 320px phones up
+       through 768px tablets without ever exceeding the screen. Sliding
+       via `transform` (GPU-composited) rather than animating `right`
+       (a layout property) is also what removes the blurry text/icons
+       during the open/close animation — animating `right` forces the
+       browser to repaint the drawer at sub-pixel offsets on every frame,
+       which is what smears the text; `transform` moves the already
+       painted, crisp layer as a whole. */
+    .nav-collapse {
+        display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start;
+        gap: 6px;
+        position: fixed; top: 98px; right: 0;
+        width: min(320px, 84vw);
+        max-width: 100vw;
+        height: calc(100vh - 98px);
+        height: calc(100dvh - 98px);
+        background: #0b1a14;
+        padding: 22px max(20px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) 20px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        transform: translateX(100%);
+        transition: transform 0.32s cubic-bezier(0.22,0.8,0.36,1);
+        will-change: transform;
+        backface-visibility: hidden;
+        box-shadow: -10px 0 34px rgba(0,0,0,0.35);
+        z-index: 1500;
+        /* Crisp text/icons: no blur/opacity/filter is ever applied to this
+           panel or its children, and text rendering stays pixel-sharp
+           through the slide because only `transform` animates. */
+        filter: none;
+        backdrop-filter: none;
+        opacity: 1;
+    }
+    .nav-collapse.open { transform: translateX(0); }
+    .nav-overlay { top: 98px; }
+
+    .nav-menu {
+        display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start;
+        flex: none; gap: 2px; width: 100%; margin: 0; padding-bottom: 14px;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    /* Higher-specificity selector (.nav-collapse .nav-menu li) is
+       needed here, not just `.nav-menu li`: includes/header.php inlines
+       an identical-specificity copy of animations.css's entrance-fade
+       rule in a page-level <style> block that loads after this file, so
+       an equal-specificity override here would otherwise lose the
+       cascade and the drawer's items would still fade in from opacity 0
+       every time the drawer opens — looking washed-out/blurry instead
+       of instantly sharp. */
+    .nav-collapse .nav-menu li { width: 100%; opacity: 1; animation: none; }
+    .nav-menu a {
+        width: 100%;
+        display: flex; align-items: center; gap: 14px;
+        padding: 13px 14px;
+        font-size: 14.5px; font-weight: 600;
+        border-radius: 10px !important;
+        line-height: 1.3;
+    }
+    .nav-menu a i {
+        width: 20px; flex-shrink: 0; text-align: center; font-size: 15px;
+    }
+    /* `.nav-collapse` prefix raises specificity above the equal-specificity
+       `.nav-menu a.active` / `.nav-menu a:hover` rules that includes/header.php
+       inlines (with its own !important flags) later in the document — without
+       this, that later, equal-specificity desktop rule wins the cascade even
+       inside this media query, and the desktop underline+lift look (meant for
+       the horizontal top nav) bleeds into the vertical mobile drawer. */
+    .nav-collapse .nav-menu a.active {
+        transform: none !important;
+        border-bottom: none !important;
+        border-left: 3px solid #4CAF50;
+        background: rgba(76,175,80,0.12) !important;
+        padding-left: 12px;
+        padding-bottom: 13px !important;
+    }
+    .nav-collapse .nav-menu a:hover { transform: none !important; background: rgba(255,255,255,0.06) !important; }
+
+    .nav-collapse .nav-right {
+        flex-direction: column; align-items: stretch; gap: 14px; width: 100%;
+        margin-top: 16px; animation: none;
+    }
+    .lang-select { width: 100%; text-align: center; padding: 11px 12px; }
+    .user-profile-wrap { width: 100%; }
+    .user-badge { width: 100%; justify-content: center; padding: 11px 14px; }
+    .profile-dropdown { position: static; width: 100%; margin-top: 10px; box-shadow: none; border: 1px solid rgba(255,255,255,0.12); }
+}
+
+/* Extra-narrow phones: trim side padding slightly so equal-width spacing
+   still feels balanced instead of cramped, without changing the layout
+   shape used above. */
+@media (max-width: 380px) {
+    .nav-collapse {
+        width: min(300px, 88vw);
+        padding-left: 16px;
+        padding-right: max(16px, env(safe-area-inset-right));
+    }
+    .nav-menu a { padding: 12px 12px; font-size: 14px; }
+}
+
+footer {
+    padding-top: 0 !important;
+}
+
+.footer-container {
+    padding-top: 20px !important;
+}
+
+.footer-grid {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}

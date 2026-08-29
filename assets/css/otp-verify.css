@@ -1,0 +1,78 @@
+/* =====================================================================
+   assets/css/otp-verify.css — styles for the AgriCart email-OTP step.
+   Loaded by pages/register.php alongside its existing inline <style>.
+   Kept in the same green/white AgriCart theme as the rest of the
+   registration card.
+   ===================================================================== */
+
+/* Masked-email badge shown above the OTP boxes */
+.otp-email-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(76, 175, 80, 0.16);
+  border: 1px solid rgba(76, 175, 80, 0.4);
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 4px 12px;
+  border-radius: 100px;
+}
+.otp-email-badge i { color: #AEE24B; }
+
+/* "A verification OTP has been sent to your registered email address." banner */
+.otp-sent-banner {
+  background: #E6F4EA;
+  border: 1px solid #c8e6c9;
+  color: #1B5E20;
+  font-size: 13px;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.5;
+}
+.otp-sent-banner i { margin-top: 2px; color: #2E7D32; }
+
+/* Local-development-only notice — never contains the OTP itself */
+.otp-dev-banner {
+  background: rgba(255, 193, 7, 0.14);
+  border: 1px dashed rgba(255, 193, 7, 0.5);
+  color: #FFE082;
+  font-size: 12px;
+  border-radius: 10px;
+  padding: 9px 12px;
+  margin-bottom: 14px;
+  line-height: 1.5;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.otp-dev-banner i { color: #FFC107; margin-top: 1px; }
+
+/* "Change Email Address" link under the OTP boxes */
+.change-email-row {
+  text-align: center;
+  margin-bottom: 6px;
+}
+.change-email-link {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 12.5px;
+  text-decoration: underline;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+}
+.change-email-link:hover { color: #fff; }
+
+/* Resend status line (rate limit / max attempts reached) */
+.otp-status-line {
+  text-align: center;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: -6px;
+  margin-bottom: 12px;
+}

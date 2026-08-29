@@ -1,0 +1,135 @@
+/* =====================================================================
+   admin/assets/css/action-menu.css
+   ---------------------------------------------------------------------
+   ONE shared stylesheet for every "⋮" Action button + dropdown in the
+   AgriCart Admin Panel. Loaded once, globally, from
+   includes/team_layout_top.php — every list page (Team Members,
+   Accounts/Sellers, Products, Orders/Invoices, Payouts, Commission,
+   Inventory, Roles, GST/Payment verification, etc.) gets the same
+   look, the same open/close/position behaviour, and the same danger
+   styling for Delete, with zero per-page duplication.
+
+   Two markup conventions already existed in this codebase before this
+   file (`.actions-menu` / `.actions-menu-btn` and `.action-menu` /
+   `.kebab-btn`). Rather than force a risky rename across every page,
+   both are supported here as aliases so every existing table instantly
+   inherits the upgraded behaviour/styling with no markup changes.
+   New tables should use the `.actions-menu` / `.actions-menu-btn`
+   naming (that's what includes/action_menu.php renders).
+   ===================================================================== */
+
+.actions-cell,
+.action-menu-wrap { position: relative; text-align: right; }
+
+/* ---- Trigger button ("⋮") ---- */
+.actions-menu-btn,
+.kebab-btn,
+.row-kebab {
+    width: 32px; height: 32px; border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: #fff; color: var(--text);
+    cursor: pointer; font-size: 15px; line-height: 1;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: background .15s, border-color .15s, box-shadow .15s;
+}
+.actions-menu-btn:hover,
+.kebab-btn:hover,
+.row-kebab:hover { background: var(--bg-soft); }
+.actions-menu-btn:focus-visible,
+.kebab-btn:focus-visible,
+.row-kebab:focus-visible,
+.actions-menu a:focus-visible,
+.actions-menu button:focus-visible,
+.action-menu a:focus-visible,
+.action-menu button:focus-visible {
+    outline: 2px solid var(--primary, #2f6f4f);
+    outline-offset: 2px;
+}
+.actions-menu-btn[aria-expanded="true"],
+.kebab-btn[aria-expanded="true"],
+.row-kebab[aria-expanded="true"] {
+    background: var(--bg-soft);
+    border-color: var(--primary, #2f6f4f);
+}
+
+/* ---- Dropdown panel ---- */
+.actions-menu,
+.action-menu {
+    display: none;
+    position: fixed; /* positioned in JS; portalled to <body> so it can
+                         never be clipped by a table's overflow-x wrapper */
+    z-index: 1200;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    min-width: 210px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.14);
+    padding: 6px;
+    text-align: left;
+    max-height: min(360px, calc(100vh - 24px));
+    overflow-y: auto;
+    transform-origin: top right;
+    opacity: 0;
+    transform: scale(.96) translateY(-4px);
+    transition: opacity .12s ease, transform .12s ease;
+}
+.actions-menu.open,
+.action-menu.open {
+    display: block;
+    opacity: 1;
+    transform: scale(1) translateY(0);
+}
+
+.actions-menu a, .actions-menu button,
+.action-menu a, .action-menu button {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; padding: 9px 10px; border: none;
+    background: none; border-radius: 7px;
+    font-size: 12.5px; font-family: inherit; color: var(--text);
+    cursor: pointer; text-align: left;
+}
+.actions-menu a:hover, .actions-menu button:hover,
+.action-menu a:hover, .action-menu button:hover { background: var(--bg-soft); }
+
+.actions-menu i, .action-menu i { width: 15px; text-align: center; color: var(--muted); }
+
+.actions-menu .divider, .action-menu .divider {
+    height: 1px; background: var(--border); margin: 5px 2px;
+}
+
+/* ---- Danger / Delete item — always red, never any other color ---- */
+.actions-menu .danger-item, .action-menu .danger-item,
+.actions-menu .menu-danger, .action-menu .menu-danger {
+    color: var(--danger) !important;
+}
+.actions-menu .danger-item i, .action-menu .danger-item i,
+.actions-menu .menu-danger i, .action-menu .menu-danger i {
+    color: var(--danger) !important;
+}
+.actions-menu .danger-item:hover, .action-menu .danger-item:hover,
+.actions-menu .menu-danger:hover, .action-menu .menu-danger:hover {
+    background: rgba(178, 58, 54, .1); /* light danger background on hover */
+}
+
+/* ---- Success-flavoured items (Activate, Verify, Approve) ---- */
+.actions-menu .menu-success, .action-menu .menu-success { color: var(--success); }
+.actions-menu .menu-success i, .action-menu .menu-success i { color: var(--success); }
+.actions-menu .menu-success:hover, .action-menu .menu-success:hover {
+    background: rgba(47, 111, 79, .08);
+}
+
+/* ---- Mobile ---- */
+@media (max-width: 640px) {
+    .actions-menu, .action-menu {
+        min-width: 180px;
+        max-width: calc(100vw - 16px);
+    }
+    .actions-menu a, .actions-menu button,
+    .action-menu a, .action-menu button {
+        padding: 11px 10px; /* larger tap target */
+        font-size: 13px;
+    }
+    .actions-menu-btn, .kebab-btn, .row-kebab {
+        width: 34px; height: 34px;
+    }
+}

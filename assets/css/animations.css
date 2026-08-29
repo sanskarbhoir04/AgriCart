@@ -1,0 +1,156 @@
+/* ==========================================================================
+   🎬 AgriCart – Global Animation & Micro-Interaction Layer
+   Sitewide scroll reveals, button ripples, hover polish, counters and
+   small delightful touches. Loaded on every page via includes/header.php.
+   Safe-by-design: elements only animate once JS tags them, so nothing
+   breaks if a script fails to load.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------- */
+/* 0. Respect reduced-motion preference                                    */
+/* ---------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+    .agri-reveal { opacity: 1 !important; transform: none !important; }
+}
+
+/* ---------------------------------------------------------------------- */
+/* 1. Page-load entrance                                                   */
+/* ---------------------------------------------------------------------- */
+@keyframes agriPageFadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+html.agri-anim-ready body { animation: agriPageFadeIn .55s cubic-bezier(.22,.8,.36,1) both; }
+
+/* Nav bar gentle intro (small elements matter too) */
+@keyframes agriNavItemIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes agriFadeInLeft  { from { opacity: 0; transform: translateX(-14px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes agriFadeInRight { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: translateX(0); } }
+
+.nav-logo   { animation: agriFadeInLeft .5s ease both; }
+.nav-right  { animation: agriFadeInRight .5s ease both; }
+.nav-menu li { opacity: 0; animation: agriNavItemIn .45s cubic-bezier(.22,.8,.36,1) both; }
+.nav-menu li:nth-child(1) { animation-delay: .08s; }
+.nav-menu li:nth-child(2) { animation-delay: .13s; }
+.nav-menu li:nth-child(3) { animation-delay: .18s; }
+.nav-menu li:nth-child(4) { animation-delay: .23s; }
+.nav-menu li:nth-child(5) { animation-delay: .28s; }
+.nav-menu li:nth-child(6) { animation-delay: .33s; }
+.nav-menu li:nth-child(7) { animation-delay: .38s; }
+.nav-menu li:nth-child(8) { animation-delay: .43s; }
+
+/* ---------------------------------------------------------------------- */
+/* 2. Scroll-reveal system (classes applied at runtime by animations.js)   */
+/* ---------------------------------------------------------------------- */
+.agri-reveal {
+    opacity: 0;
+    transform: translateY(34px);
+    transition: opacity .7s cubic-bezier(.16,.84,.44,1), transform .7s cubic-bezier(.16,.84,.44,1);
+}
+.agri-reveal.agri-reveal-left  { transform: translateX(-40px); }
+.agri-reveal.agri-reveal-right { transform: translateX(40px); }
+.agri-reveal.agri-reveal-zoom  { transform: scale(.9); }
+.agri-reveal.agri-in {
+    opacity: 1 !important;
+    transform: translate(0, 0) scale(1) !important;
+}
+
+/* ---------------------------------------------------------------------- */
+/* 3. Buttons – press feedback + ripple                                    */
+/* ---------------------------------------------------------------------- */
+button, .btn, [class*="btn"], a.gallery-btn, a.dropdown-link, .save-btn, .checkout-btn, .add-btn {
+    transition: transform .16s cubic-bezier(.34,1.56,.64,1), filter .2s ease, box-shadow .2s ease;
+}
+button:active, .btn:active, [class*="btn"]:active { transform: scale(.95); }
+button:hover:not(:disabled), .btn:hover, [class*="btn"]:hover { filter: brightness(1.04); }
+
+.agri-ripple-wrap { position: relative; overflow: hidden; }
+.agri-ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,.55);
+    transform: scale(0);
+    opacity: .9;
+    pointer-events: none;
+    animation: agriRippleAnim .6s ease-out forwards;
+}
+@keyframes agriRippleAnim { to { transform: scale(2.6); opacity: 0; } }
+
+/* ---------------------------------------------------------------------- */
+/* 4. Image zoom inside cards on hover (adds depth to small details)       */
+/* ---------------------------------------------------------------------- */
+.product-img, .gallery-img, .kb-product-card img, .kb-listing-card img, .kb-farmer-card img, .kb-buyer-card img {
+    transition: transform .55s cubic-bezier(.16,.84,.44,1);
+}
+.product-card:hover .product-img,
+.gallery-card:hover .gallery-img,
+.kb-product-card:hover img,
+.kb-listing-card:hover img,
+.kb-farmer-card:hover img,
+.kb-buyer-card:hover img { transform: scale(1.08); }
+
+/* ---------------------------------------------------------------------- */
+/* 5. Badges & status dots – soft pulse                                    */
+/* ---------------------------------------------------------------------- */
+@keyframes agriPulseRed   { 0%,100% { box-shadow: 0 0 0 0 rgba(220,38,38,.35); } 50% { box-shadow: 0 0 0 6px rgba(220,38,38,0); } }
+@keyframes agriPulseGreen { 0%,100% { box-shadow: 0 0 0 0 rgba(76,175,80,.4);  } 50% { box-shadow: 0 0 0 7px rgba(76,175,80,0);  } }
+
+.product-badge, .kb-trending-card__badge { animation: agriPulseRed 2.2s ease-in-out infinite; }
+.hero-badge, .kb-badge, .kb-hero__badge, .slide-tag { animation: agriPulseGreen 2.6s ease-in-out infinite; }
+.dot.active { animation: agriPulseGreen 1.6s ease-in-out infinite; }
+
+/* ---------------------------------------------------------------------- */
+/* 6. Icon micro-interactions                                              */
+/* ---------------------------------------------------------------------- */
+.nav-menu a i { display: inline-block; transition: transform .3s cubic-bezier(.34,1.56,.64,1); }
+.nav-menu a:hover i { transform: translateY(-2px) scale(1.15); }
+
+@keyframes agriIconFloat {
+    0%   { transform: translateY(0) rotate(0); }
+    30%  { transform: translateY(-6px) rotate(-8deg); }
+    60%  { transform: translateY(1px) rotate(4deg); }
+    100% { transform: translateY(0) rotate(0); }
+}
+.footer-socials a i, .scheme-item:hover .scheme-go, .gallery-btn:hover i, .add-btn:hover i {
+    display: inline-block;
+}
+.footer-socials a:hover i { animation: agriIconFloat .6s ease; }
+
+/* ---------------------------------------------------------------------- */
+/* 7. Form field focus glow                                                */
+/* ---------------------------------------------------------------------- */
+.form-group input, .form-group textarea, .calc-input, .kb-search-bar input, .hero-search input {
+    transition: border-color .25s ease, box-shadow .25s ease;
+}
+.form-group input:focus, .form-group textarea:focus, .calc-input:focus, .kb-search-bar input:focus {
+    box-shadow: 0 0 0 4px rgba(76,175,80,.15);
+}
+
+/* ---------------------------------------------------------------------- */
+/* 8. Modal / popup pop-in                                                 */
+/* ---------------------------------------------------------------------- */
+@keyframes agriPopIn {
+    from { opacity: 0; transform: scale(.86) translateY(16px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.profile-modal.open .modal-card,
+.auth-modal.open .modal-card,
+.cart-overlay.open ~ .cart-drawer .cart-head { animation: agriPopIn .35s cubic-bezier(.34,1.56,.64,1); }
+.modal-card { animation: agriPopIn .35s cubic-bezier(.34,1.56,.64,1); }
+
+/* ---------------------------------------------------------------------- */
+/* 9. Counter number support (JS animates innerText, CSS just steadies it) */
+/* ---------------------------------------------------------------------- */
+.agri-counted { display: inline-block; font-variant-numeric: tabular-nums; }
+
+/* ---------------------------------------------------------------------- */
+/* 10. Subtle floating accent for hero tags / offer strips                 */
+/* ---------------------------------------------------------------------- */
+@keyframes agriFloatSlow { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+.offer-strip i, .scan-box i { animation: agriFloatSlow 3.2s ease-in-out infinite; }
+
+/* ---------------------------------------------------------------------- */
+/* 11. Cart toast / drawer already transition — add gentle overshoot       */
+/* ---------------------------------------------------------------------- */
+.cart-toast.show { animation: agriPopIn .4s cubic-bezier(.34,1.56,.64,1); }

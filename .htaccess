@@ -1,0 +1,64 @@
+# =====================================================================
+# AgriCart — root .htaccess
+# Blocks direct browser access to secrets/backups/config, disables
+# directory listing, and adds baseline security headers.
+# Does NOT change any routing/rewrite behaviour for the app itself.
+# =====================================================================
+
+# Never list directory contents
+Options -Indexes
+
+# Hide PHP version / server signature where the host allows it
+ServerSignature Off
+<IfModule mod_headers.c>
+    Header unset X-Powered-By
+</IfModule>
+
+# --- Block direct access to sensitive files ---------------------------
+<FilesMatch "(^\.env(\.example)?$|\.sql$|\.zip$|\.log$|\.bak$|\.gitignore$|\.gitkeep$|composer\.(json|lock)$)">
+    Require all denied
+</FilesMatch>
+
+# Belt-and-braces for older Apache (mod_authz_host not always present)
+<FilesMatch "(^\.env(\.example)?$|\.sql$|\.zip$|\.log$|\.bak$)">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Block access to dotfiles in general (.git, .env, etc.)
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+# --- Security headers --------------------------------------------------
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "geolocation=(self), camera=(), microphone=()"
+    # CSP left commented out by default: enabling a strict CSP on an
+    # existing site without auditing every inline <script>/<style> tag
+    # WILL break pages. Turn on after an inline-script audit.
+    # Header always set Content-Security-Policy "default-src 'self'; img-src 'self' data: https:; script-src 'self' https://checkout.razorpay.com; style-src 'self' 'unsafe-inline'"
+</IfModule>
+
+# --- Browser caching for static assets ---------------------------------
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType text/css "access plus 1 week"
+    ExpiresByType application/javascript "access plus 1 week"
+</IfModule>
+
+# --- Redirect HTTP -> HTTPS (only fires when the host actually has SSL) ---
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteCond %{HTTP_HOST} !^localhost [NC]
+    RewriteCond %{HTTP_HOST} !^127\.0\.0\.1
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>

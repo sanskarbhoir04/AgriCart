@@ -1,0 +1,10 @@
+.chavadi-wrapper { max-width: 1200px; margin: 0 auto; padding: 20px; }
+.chavadi-layout { display: grid; grid-template-columns: 250px 1fr 300px; gap: 20px; }
+.chavadi-hero { text-align: center; padding: 50px 0; background: var(--kb-green-50); border-radius: 20px; margin-bottom: 20px; }
+.post-composer { background: white; padding: 20px; border-radius: 12px; border: 1px solid #ddd; }
+.ai-assistant-box { margin-top: 20px; background: white; padding: 10px; border-radius: 50px; display: inline-flex; }
+.widget { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #eee; }
+
+@media (max-width: 900px) {
+    .chavadi-layout { grid-template-columns: 1fr; }
+}

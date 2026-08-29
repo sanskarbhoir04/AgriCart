@@ -1,0 +1,394 @@
+/* =====================================================================
+   AgriCart – GLOBAL RESPONSIVE / MOBILE-FRIENDLY SAFETY NET  (v2)
+   Load this file LAST (after style.css, auth.css, page-specific styles)
+   so its rules can override earlier ones when needed.
+
+   Goal: no horizontal scroll, no overlapping elements, readable text
+   and ≥44px tappable targets on every screen from 320px phones up to
+   1920px+ ultra-wide monitors — WITHOUT touching colors, fonts, icons,
+   branding, spacing rhythm, animations, PHP, or JS logic. Desktop
+   (≥1200px) is intentionally left visually identical to before; every
+   rule below only changes behaviour at or below the stated breakpoint.
+
+   Breakpoint ladder used throughout this file:
+     1920px  ultra-wide          576px  large phone
+     1400px  large desktop       425px  phone
+     1200px  small desktop       375px  small phone
+      992px  tablet landscape    320px  smallest supported phone
+      768px  tablet portrait
+   ===================================================================== */
+
+/* ---------- 1. Base / global safety net ---------- */
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scroll-behavior: smooth;
+}
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+body {
+    overflow-x: hidden;
+    max-width: 100%;
+}
+img, video, iframe, svg {
+    max-width: 100%;
+    height: auto;
+}
+/* Canvas (Chart.js etc.) scales by width only — Chart.js manages its own
+   height via JS, so forcing height:auto here would fight its resize logic. */
+canvas { max-width: 100%; }
+
+table {
+    max-width: 100%;
+}
+/* Wrap any wide table so it scrolls inside itself instead of pushing the page */
+.table-responsive,
+.responsive-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Long words/URLs (emails, order IDs, addresses) should wrap instead of
+   forcing horizontal scroll on narrow screens. */
+@media (max-width: 768px) {
+    p, li, td, .info-chip b, .hist-card, .agi-table, .kb-tbl, .lg-table {
+        overflow-wrap: break-word;
+        word-break: break-word;
+    }
+}
+
+/* ---------- 2. Ultra-wide screens (≥1920px) ---------- */
+/* Enterprise-grade sites cap the reading/content width on very large
+   monitors so grids/cards don't stretch into oversized, sparse rows.
+   This only affects screens wider than 1920px and only page sections
+   that already flow full-width; existing max-width containers (e.g.
+   .container-1340 style wrappers) are untouched. */
+@media (min-width: 1920px) {
+    .footer-grid, .abt-offer-grid, .abt-why-grid,
+    .products-grid, .gallery-grid, .testimonial-grid {
+        max-width: 1800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+/* ---------- 3. Laptops / small desktops (≤1200px) ---------- */
+@media (max-width: 1200px) {
+    .km-selgrid, .km-infogrid { grid-template-columns: 1fr 1fr !important; }
+    .kb-insights__grid { grid-template-columns: repeat(3, 1fr) !important; }
+}
+
+/* ---------- 4. Tablet landscape (≤992px) ---------- */
+@media (max-width: 992px) {
+    .abt-offer-grid { grid-template-columns: repeat(3, 1fr) !important; }
+    .abt-why-grid   { grid-template-columns: repeat(2, 1fr) !important; }
+
+    .km-selgrid, .km-infogrid   { grid-template-columns: 1fr !important; }
+    .km-statgrid                { grid-template-columns: repeat(3, 1fr) !important; }
+    .km-calgrid                 { grid-template-columns: repeat(2, 1fr) !important; }
+
+    .le-grid2, .le-grid3        { grid-template-columns: 1fr !important; }
+
+    .dashboard-grid             { grid-template-columns: 1fr !important; }
+    .ask-question .field-row    { grid-template-columns: 1fr !important; }
+
+    .lg-glance-grid             { grid-template-columns: repeat(2, 1fr) !important; }
+
+    .rm-specs-grid              { grid-template-columns: 1fr !important; }
+
+    .cu-about-grid, .cu-grid    { grid-template-columns: 1fr !important; }
+    .cu-about-checklist, .cu-row { grid-template-columns: 1fr !important; }
+
+    /* Hero slider: shorter on tablets so it doesn't dominate the first
+       screen, while keeping the 16:9-ish feel the brief for desktop. */
+    .slider-wrap { height: 62vh; min-height: 420px; }
+
+    /* Seller / market-rate / feature card strips that are still fixed
+       to 4-5 columns on tablets collapse to something that actually
+       fits without squeezing card content. */
+    .kb-products__grid { grid-template-columns: repeat(2, 1fr) !important; }
+    .kb-trending__grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+    /* Dashboard / seller sidebars that are laid out as a fixed side
+       column go full-width and stack above their content on tablets. */
+    .store-layout, .chavadi-layout { grid-template-columns: 1fr !important; }
+
+    /* footer.php sets its own unconditional (non-media-query) 4-column
+       ratio (8fr 5fr 7fr 5fr) inline, which otherwise wins the cascade
+       over style.css's tablet rule since it's later in source order —
+       so it needs !important here to actually collapse on tablets. */
+    .footer-grid { grid-template-columns: repeat(2, 1fr) !important; row-gap: 28px; }
+    .footer-grid .footer-col:nth-child(odd) { border-left: none !important; padding-left: 0 !important; }
+}
+
+/* ---------- 5. Tablet portrait / large phone (≤768px) ---------- */
+@media (max-width: 768px) {
+    /* Fluid headings — matches the existing desktop max size at 1200px+
+       (via clamp's own upper bound) so nothing shifts above this
+       breakpoint; only narrows further down toward phone widths. */
+    h1 { font-size: clamp(24px, 5vw, 30px); line-height: 1.25; }
+    h2 { font-size: clamp(20px, 4vw, 25px); line-height: 1.3; }
+    h3 { font-size: clamp(17px, 3.2vw, 20px); }
+
+    .kb-insights__grid { grid-template-columns: repeat(2, 1fr) !important; }
+    .kb-filters__grid  { grid-template-columns: 1fr 1fr !important; }
+
+    /* Search & filter bars: stack vertically instead of forcing a
+       cramped horizontal row once below tablet-portrait width. */
+    .filter-bar, .search-filter-row, .kb-filters, .hero-search {
+        flex-wrap: wrap;
+    }
+
+    /* Modals: give a bit more breathing room / scroll safety on
+       shorter tablet-portrait viewports. */
+    .modal-card, .history-card { max-height: 90vh; }
+    .modal-body { max-height: 65vh; }
+
+    /* Chat widget: keep it clear of thumb-reach edges and content
+       below the fold on tablets (desktop position untouched). */
+    #km-box { width: min(370px, calc(100vw - 24px)); }
+}
+
+/* ---------- 6. Mobile breakpoint (≤600px) ---------- */
+@media (max-width: 600px) {
+    html { font-size: 15px; }
+
+    .container, .section, .wrapper {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+    }
+
+    h1, .hero h1 { font-size: 26px !important; line-height: 1.25 !important; }
+    h2, .section-title { font-size: 21px !important; }
+    h3 { font-size: 17px !important; }
+    p  { font-size: 14px !important; }
+
+    .abt-offer-grid, .abt-why-grid { grid-template-columns: 1fr !important; }
+    .km-statgrid, .km-calgrid       { grid-template-columns: repeat(2, 1fr) !important; }
+    .lg-glance-grid                 { grid-template-columns: 1fr !important; }
+
+    /* Forms: stack every side-by-side field on narrow screens */
+    .form-row, .radio-grid,
+    div[style*="grid-template-columns:1fr 1fr"],
+    div[style*="grid-template-columns: 1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+    }
+
+    input, select, textarea, button, .btn {
+        font-size: 16px; /* prevents iOS auto-zoom on focus */
+    }
+
+    /* Forms: full-width inputs, no bleed off the edge of the card */
+    .form-group, .form-row > *, form input, form select, form textarea {
+        width: 100%;
+        max-width: 100%;
+    }
+    label { display: block; }
+
+    /* Buttons should be full-width and easy to tap on small screens,
+       and meet a 44px minimum touch target everywhere, not just on
+       the specific classes previously listed. */
+    .btn, button.primary, .checkout-btn {
+        min-height: 44px;
+    }
+    button, .btn, a.gallery-btn, .add-btn, .save-btn, .history-btn,
+    input[type="submit"], input[type="button"] {
+        min-height: 44px;
+        padding-top: max(10px, env(safe-area-inset-top, 0px));
+    }
+
+    /* Any 4/5/7-column stat strips collapse to 2 columns */
+    .stats, .stat-strip { grid-template-columns: repeat(2, 1fr) !important; }
+
+    /* Cards/galleries that are still 2+ columns at this width go single-column */
+    .gallery-grid, .widget-grid, .footer-grid,
+    .cu-cards-grid, .checkout-grid, .pm-layout {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Product / equipment / seller / feature card grids: let them
+       auto-wrap down to a single comfortable column instead of
+       squeezing 2 narrow cards side by side. */
+    .products-grid, .kb-products__grid, .kb-listings__grid,
+    .kb-farmers__grid, .kb-buyers__grid, .kb-trending__grid,
+    .testimonial-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .kb-insights__grid, .kb-filters__grid { grid-template-columns: 1fr !important; }
+
+    /* Hero slider: shorter still on phones; content stays centered
+       and never crops out of the visible area. */
+    .slider-wrap { height: 56vh; min-height: 380px; }
+    .slide-content { width: 92%; }
+    .hero p { font-size: 13.5px; }
+
+    /* Footer: stack all columns to one, drop the dividers that only
+       make sense in a multi-column row, keep social icons tappable */
+    .footer-grid { grid-template-columns: 1fr !important; row-gap: 26px; }
+    .footer-grid .footer-col { border-left: none !important; padding-left: 0 !important; }
+    .footer-socials { justify-content: flex-start; gap: 18px; }
+    .footer-socials a { font-size: 20px; }
+    .footer-copy, .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+
+    /* Modals: full-bleed-ish width, centered, scrollable body */
+    .profile-modal, .history-modal { padding: 10px; }
+    .modal-card, .history-card { width: 100%; max-height: 92vh; }
+
+    /* Chat widget: don't let it overlap footer / nav content on phones */
+    #km-fab { width: 56px; height: 56px; }
+    #km-fab .km-farmer { width: 30px; height: 30px; }
+
+    /* Cart / wishlist side drawers (marketplace.php): style.css fixes these
+       at 360px with no upper bound, so on phones narrower than 360px the
+       drawer's left edge was pushed off-screen (unreachable content) while
+       still being flush against the right edge. Capping at 100vw keeps it
+       fully on-screen and flush-right on any phone down to 320px, and is a
+       no-op above 360px since the browser just uses the smaller value. */
+    .cart-drawer { width: min(360px, 100vw); }
+
+    /* marketplace.php's notification bell dropdown is a fixed 300px inline
+       style, anchored to a button that isn't flush with the viewport edge
+       on mobile (filter bar wraps) — it was overflowing off the right side.
+       !important is needed here only because it's overriding an inline
+       style="" attribute in the markup, not because it's fighting other CSS. */
+    #notifPanel { width: min(300px, calc(100vw - 24px)) !important; right: -8px !important; }
+}
+
+/* ---------- 7. Large phones (≤480px) ---------- */
+@media (max-width: 480px) {
+    .km-statgrid, .stats, .stat-strip { grid-template-columns: repeat(2, 1fr) !important; }
+    .kb-filters__grid { grid-template-columns: 1fr !important; }
+    .kb-insights__grid { grid-template-columns: 1fr 1fr !important; }
+    .kb-trending__grid { grid-template-columns: 1fr !important; }
+
+    /* Hero search + slider dots need extra margin so they don't crowd
+       the bottom edge on the smallest common phone widths. */
+    .hero-search { padding: 4px 5px; }
+    .slider-dots { bottom: 12px; }
+
+    /* Home page weather widget (index.php + pages/fetch_weather.php):
+       .weather-main's two sides (temp/condition on the left, GPS coords +
+       date on the right) sit `min-width:0` so they CAN shrink, but at this
+       width the coordinate string + date still don't fit next to the large
+       temperature on one line and were getting visually clipped by the
+       card's own padding/overflow rather than wrapping. Letting the row
+       wrap moves the location/date block onto its own line instead of
+       forcing it out to the right. Same underlying issue in the 5-day
+       forecast strip below it: 5 cards at their default min-width need
+       more room than a narrow phone has, so it was starting off cut short
+       instead of visibly scrollable — shrinking the cards and card padding
+       lets closer to all 5 fit without needing a swipe. */
+    .weather-main { flex-wrap: wrap; row-gap: 8px; }
+    .weather-main > div:last-child { text-align: left; flex: 1 1 100%; }
+    .widget-card { padding: 18px 16px; }
+    .weather-forecast { gap: 6px; }
+    .forecast-day { min-width: 48px; padding: 6px 2px; font-size: 11px; }
+}
+
+/* ---------- 8. Small phones (≤425px) ---------- */
+@media (max-width: 425px) {
+    .nav-logo-txt { font-size: 15px; }
+    .hero h1 { font-size: 22px !important; }
+    .section-title { font-size: 19px !important; }
+
+    /* Sticky/fixed flash bar text stays on one line without overflow */
+    .marquee-inner span { font-size: 11px !important; }
+}
+
+/* ---------- 9. Extra-small phones (≤380px, ≤375px, ≤320px) ---------- */
+@media (max-width: 380px) {
+    html { font-size: 14px; }
+    .km-statgrid, .stats, .stat-strip { grid-template-columns: repeat(2, 1fr) !important; }
+}
+@media (max-width: 375px) {
+    .hero-badge { font-size: 10.5px; padding: 5px 10px; }
+    .modal-avatar { width: 54px; height: 54px; font-size: 26px; }
+}
+@media (max-width: 320px) {
+    html { font-size: 13.5px; }
+    .hero h1 { font-size: 20px !important; }
+    .nav-logo-img { height: 30px; }
+    .stats, .stat-strip, .km-statgrid { grid-template-columns: 1fr 1fr !important; gap: 6px; }
+    #km-box { width: calc(100vw - 12px); right: 6px; }
+    #km-fab { right: 10px; }
+}
+
+/* ---------- 10. Sticky table headers (JS adds .agri-table-wrap /
+   .agri-table-scroll around any <table> — see assets/js/agri-master.js
+   or the inline bootstrap in includes/header.php). Works for
+   .cmp-table, .rm-dash-table, .km-tbl, .agi-table, .lg-table, .kb-table
+   and any future table without needing markup changes per page. ---------- */
+.agri-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+}
+.agri-table-wrap table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.agri-table-wrap thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    /* Each table already sets its own thead/th background (see
+       krishi-bazaar.css, invoice.php, refund-policy.php, rental.php,
+       advisory.php inline styles) — intentionally not overridden here
+       so the sticky header keeps its real color instead of going
+       transparent while scrolling. */
+}
+@media (max-width: 600px) {
+    .agri-table-wrap table { min-width: 480px; } /* keeps columns readable while the wrap scrolls */
+    .agri-table-wrap th, .agri-table-wrap td { padding: 8px 10px; font-size: 13px; }
+}
+
+/* ---------- 11. Dashboards (user-facing, not admin/seller internal
+   layouts which get their own dedicated pass) ---------- */
+@media (max-width: 992px) {
+    .dashboard-sidebar { position: static; width: 100%; }
+    .dashboard-cards, .stats-cards, .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+@media (max-width: 600px) {
+    .dashboard-cards, .stats-cards, .dashboard-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* ---------- 12. Touch target safety net (applies at any width the
+   pointer is coarse — i.e. touchscreens, regardless of viewport) ---------- */
+@media (pointer: coarse) {
+    button, .btn, a.gallery-btn, .add-btn, .qty-btn, .remove-btn,
+    .close-btn, .hamburger-btn, #km-fab, #km-sbtn, .km-qb {
+        min-width: 32px;
+        min-height: 32px;
+    }
+    .btn, button.primary, .checkout-btn, .save-btn, .history-btn {
+        min-height: 44px;
+    }
+}
+
+/* ---------- 13. Global overflow safety net ----------
+   Flex/grid children default to min-width:auto, meaning they refuse to
+   shrink below their own content's width. A single long, unbroken label
+   in a flex row (a place name, an equipment name, an address, a long
+   price) can silently force that row — and with it the whole page —
+   wider than the screen. Since body has overflow-x:hidden (see section
+   1), that excess becomes genuinely invisible instead of just needing a
+   scroll — this is what caused the weather-widget cut-off on the home
+   page (fixed at the source in style.css's .weather-main), and the same
+   inline-style pattern is used in several other places across the site
+   (admin/inventory.php, admin/invoice.php, rental.php's booking-detail
+   rows, marketplace.php, agri-connect.php). This rule only *enables*
+   shrinking — it never forces a layout change — so it's safe to apply
+   broadly rather than hunting down every instance individually. */
+[style*="justify-content:space-between"] > *,
+[style*="justify-content: space-between"] > * {
+    min-width: 0;
+    overflow-wrap: break-word;
+}
+
