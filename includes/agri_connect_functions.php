@@ -93,7 +93,9 @@ if (!function_exists('agri_fetch_posts')) {
                 JOIN users u ON u.id = p.user_id
                 LEFT JOIN comments c ON c.post_id = p.id AND c.is_approved = 1 AND c.deleted_at IS NULL
                 WHERE " . implode(' AND ', $where) . "
-                GROUP BY p.id
+                GROUP BY p.id, p.user_id, p.title, p.body, p.category, p.crop, p.district,
+                         p.images, p.is_solved, p.likes_count, p.created_at, p.is_pinned,
+                         u.full_name, u.district, u.role, u.qualification
                 $having
                 ORDER BY $orderBy
                 LIMIT ? OFFSET ?";
