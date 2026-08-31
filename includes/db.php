@@ -18,8 +18,10 @@ $user   = env('DB_USER', 'root');
 $pass   = env('DB_PASS', '');
 $dbname = env('DB_NAME', 'agricart');
 
+$port = (int) env('DB_PORT', 3306);
 // ─────────────────────────────────────────────
 // CREATE MYSQLI CONNECTION
+$conn = new mysqli($host, $user, $pass, $dbname, $port);
 // ─────────────────────────────────────────────
 
 $conn = mysqli_init();
